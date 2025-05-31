@@ -125,7 +125,7 @@ namespace StudioMusik
             return true;
         }
 
-        private void button1_Click(object sender, EventArgs e) // Insert
+        private void button1_Click(object sender, EventArgs e)
         {
             if (!ValidateStudioInput()) return;
 
@@ -153,7 +153,7 @@ namespace StudioMusik
             Clear();
         }
 
-        private void button2_Click(object sender, EventArgs e) // Update
+        private void button2_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(idBox.Text))
             {

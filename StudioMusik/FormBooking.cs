@@ -16,9 +16,6 @@ namespace StudioMusik
     {
         private SqlCommand cmd;
         private SqlDataReader reader;
-
-        // 2) Tambahkan semua sekaligus
-
         public FormBooking()
         {
             InitializeComponent();
@@ -64,7 +61,6 @@ namespace StudioMusik
             {
                 string nama = reader1["nama"].ToString();
                 decimal harga = reader1.GetDecimal(reader1.GetOrdinal("harga_sewa"));
-                // misal format mata uang Indonesia
                 string itemText = $"{nama} - Rp{harga:N0}/jam";
                 instrumentCheckedListBox.Items.Add(itemText);
             }
@@ -77,7 +73,6 @@ namespace StudioMusik
             {
                 string nama = reader2["nama"].ToString();
                 decimal harga = reader2.GetDecimal(reader2.GetOrdinal("harga_sewa"));
-                // misal format mata uang Indonesia
                 string itemText = $"{nama} - Rp{harga:N0}/jam";
                 extraCheckedListBox.Items.Add(itemText);
             }
@@ -90,7 +85,6 @@ namespace StudioMusik
             {
                 string nama = reader3["nama"].ToString();
                 decimal harga = reader3.GetDecimal(reader3.GetOrdinal("harga"));
-                // misal format mata uang Indonesia
                 string itemText = $"{nama} - Rp{harga:N0}/jam";
                 studioComboBox.Items.Add(itemText);
             }
@@ -113,28 +107,24 @@ namespace StudioMusik
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Validasi studio
             if (string.IsNullOrWhiteSpace(studioComboBox.Text))
             {
                 MessageBox.Show("Pilih studio terlebih dahulu.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validasi nama band
             if (string.IsNullOrWhiteSpace(nameInp.Text))
             {
                 MessageBox.Show("Masukkan nama band.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validasi durasi > 0
             if (durInp.Value <= 0)
             {
                 MessageBox.Show("Durasi harus lebih dari 0.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Jika sudah lolos validasi, lanjutkan proses penyimpanan
             string namaStudio = studioComboBox.Text;
             string namaBand = nameInp.Text;
             string tanggal = datePicker.Value.ToString("yyyy-MM-dd");
@@ -188,17 +178,14 @@ namespace StudioMusik
 
             decimal totalTarif = (hargaStudio + totalTarifAlat + totalTarifAksesori) * durasi;
 
-            // Menyimpan nama barang alat
             string alatNames = string.Join(";", instrumentCheckedListBox.CheckedItems
                 .Cast<string>()
                 .Select(item => item));
 
-            // Menyimpan nama barang aksesori
             string aksesoriNames = string.Join(";", extraCheckedListBox.CheckedItems
                 .Cast<string>()
                 .Select(item => item));
 
-            // Gabungkan nama-nama alat dan aksesori
             string semuaNamaBarang = alatNames + (alatNames.Length > 0 && aksesoriNames.Length > 0 ? "; " : "") + aksesoriNames;
 
             cmd = new SqlCommand("INSERT INTO Booking(id_operator, nama_studio, nama_band, alat_musik_tambahan, aksesoris_tambahan, jam_mulai,durasi, tanggal_pemesanan, total_biaya) VALUES(@id_operator, @nama_studio, @nama_band, @alat_musik_tambahan, @aksesoris_tambahan, @jam_mulai,@durasi, @tanggal_pemesanan, @total_biaya)", conn);

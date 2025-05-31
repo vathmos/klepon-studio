@@ -114,7 +114,7 @@ namespace TokoOlehOlehBarokah
             return true;
         }
 
-        private void button2_Click(object sender, EventArgs e) // Insert
+        private void button2_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
 
@@ -134,7 +134,7 @@ namespace TokoOlehOlehBarokah
             Clear();
         }
 
-        private void button3_Click(object sender, EventArgs e) // Update
+        private void button3_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(idBox.Text))
             {

@@ -21,7 +21,6 @@ namespace StudioMusik
         {
             rtb.Clear();
 
-            // Pisah StudioName dan harga studio
             string studioName = BookingSession.StudioName;
             string studioPrice = "";
 

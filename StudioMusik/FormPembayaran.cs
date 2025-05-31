@@ -67,21 +67,18 @@ namespace StudioMusik
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Validasi id booking dipilih
             if (string.IsNullOrWhiteSpace(idBox.Text))
             {
                 MessageBox.Show("Pilih data booking terlebih dahulu.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validasi metode pembayaran dipilih
             if (!mbankingRadio.Checked && !ewalletRadio.Checked && !tunaiRadio.Checked)
             {
                 MessageBox.Show("Pilih metode pembayaran.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Validasi totalLabel harus ada nilai yang valid
             if (string.IsNullOrWhiteSpace(totalLabel.Text) || !decimal.TryParse(totalLabel.Text.Replace("Rp", "").Replace(".", ""), out decimal total))
             {
                 MessageBox.Show("Total biaya tidak valid.", "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -104,7 +101,6 @@ namespace StudioMusik
             else if (tunaiRadio.Checked)
                 metodePembayaran = "Tunai";
 
-            // Hitung kembalian
             decimal kembalian = jumlahBayar - total;
 
 
@@ -112,7 +108,6 @@ namespace StudioMusik
             {
                 conn.Open();
 
-                // Update pembayaran
                 cmd = new SqlCommand("UPDATE Booking SET status_pembayaran = 'dibayar', metode_pembayaran = @metode_pembayaran, jumlah_bayar = @jumlah_bayar, kembalian = @kembalian WHERE id_booking = @id_booking", conn);
                 cmd.Parameters.AddWithValue("metode_pembayaran", metodePembayaran);
                 cmd.Parameters.AddWithValue("jumlah_bayar", jumlahBayar);
@@ -120,7 +115,6 @@ namespace StudioMusik
                 cmd.Parameters.AddWithValue("id_booking", idBox.Text);
                 cmd.ExecuteNonQuery();
 
-                // Ambil data booking lagi dan assign ke BookingSession
                 cmd = new SqlCommand("SELECT id_booking, nama_band, nama_studio,durasi, tanggal_pemesanan, alat_musik_tambahan, aksesoris_tambahan, total_biaya FROM Booking WHERE id_booking = @id_booking", conn);
                 cmd.Parameters.AddWithValue("id_booking", idBox.Text);
 
