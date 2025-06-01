@@ -29,7 +29,7 @@ namespace StudioMusik
 
         private void Jadwal_Load(object sender, EventArgs e)
         {
-            cmd = new SqlCommand("SELECT nama_band, tanggal, waktu_mulai, waktu_selesai FROM Jadwal ORDER BY waktu_mulai ASC", conn);
+            cmd = new SqlCommand("SELECT nama_band, nama_studio, tanggal, waktu_mulai, waktu_selesai FROM Jadwal ORDER BY waktu_mulai ASC", conn);
             SqlDataAdapter adapter = new SqlDataAdapter();
             adapter.SelectCommand = cmd;
             DataTable dt = new DataTable();

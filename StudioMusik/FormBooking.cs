@@ -126,10 +126,11 @@ namespace StudioMusik
             }
 
             string namaStudio = studioComboBox.Text;
+
             string namaBand = nameInp.Text;
             string tanggal = datePicker.Value.ToString("yyyy-MM-dd");
-            string jam = timePicker.Value.ToString("HH:mm:ss");
-            decimal durasi = durInp.Value;
+            TimeSpan jamMulai = timePicker.Value.TimeOfDay;
+            int durasi = (int)durInp.Value;
 
             decimal hargaStudio = 0m;
             if (namaStudio.Contains("-"))
@@ -186,24 +187,63 @@ namespace StudioMusik
                 .Cast<string>()
                 .Select(item => item));
 
-            string semuaNamaBarang = alatNames + (alatNames.Length > 0 && aksesoriNames.Length > 0 ? "; " : "") + aksesoriNames;
+            try
+            {
+                conn.Open();
 
-            cmd = new SqlCommand("INSERT INTO Booking(id_operator, nama_studio, nama_band, alat_musik_tambahan, aksesoris_tambahan, jam_mulai,durasi, tanggal_pemesanan, total_biaya) VALUES(@id_operator, @nama_studio, @nama_band, @alat_musik_tambahan, @aksesoris_tambahan, @jam_mulai,@durasi, @tanggal_pemesanan, @total_biaya)", conn);
+                string checkQuery = @"
+            SELECT COUNT(*) 
+            FROM Booking
+            WHERE 
+                nama_studio = @nama_studio
+                AND tanggal_pemesanan = @tanggal_pemesanan
+                AND (
+                    (@jam_mulai < DATEADD(HOUR, durasi, CAST(jam_mulai AS DATETIME)))
+                    AND (DATEADD(HOUR, @durasi, CAST(@jam_mulai AS DATETIME)) > CAST(jam_mulai AS DATETIME))
+                )";
 
-            cmd.Parameters.AddWithValue("@id_operator", UserSession.UserID);
-            cmd.Parameters.AddWithValue("@nama_studio", namaStudio);
-            cmd.Parameters.AddWithValue("@nama_band", namaBand);
-            cmd.Parameters.AddWithValue("@alat_musik_tambahan", alatNames);
-            cmd.Parameters.AddWithValue("@aksesoris_tambahan", aksesoriNames);
-            cmd.Parameters.AddWithValue("@jam_mulai", jam);
-            cmd.Parameters.AddWithValue("@durasi", durasi);
-            cmd.Parameters.AddWithValue("@tanggal_pemesanan", tanggal);
-            cmd.Parameters.AddWithValue("@total_biaya", totalTarif);
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
+                {
+                    checkCmd.Parameters.AddWithValue("@nama_studio", namaStudio);
+                    checkCmd.Parameters.AddWithValue("@tanggal_pemesanan", tanggal);
+                    checkCmd.Parameters.AddWithValue("@jam_mulai", jamMulai.ToString(@"hh\:mm\:ss"));
+                    checkCmd.Parameters.AddWithValue("@durasi", durasi);
 
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
-            MessageBox.Show("Data berhasil ditambahkan");
+                    int count = (int)checkCmd.ExecuteScalar();
+
+                    if (count > 0)
+                    {
+                        MessageBox.Show("Jadwal bentrok dengan booking lain di studio ini pada waktu tersebut.", "Error Jadwal Bentrok", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
+                cmd = new SqlCommand(@"INSERT INTO Booking
+            (id_operator, nama_studio, nama_band, alat_musik_tambahan, aksesoris_tambahan, jam_mulai, durasi, tanggal_pemesanan, total_biaya) 
+            VALUES(@id_operator, @nama_studio, @nama_band, @alat_musik_tambahan, @aksesoris_tambahan, @jam_mulai, @durasi, @tanggal_pemesanan, @total_biaya)", conn);
+
+                cmd.Parameters.AddWithValue("@id_operator", UserSession.UserID);
+                cmd.Parameters.AddWithValue("@nama_studio", namaStudio);
+                cmd.Parameters.AddWithValue("@nama_band", namaBand);
+                cmd.Parameters.AddWithValue("@alat_musik_tambahan", alatNames);
+                cmd.Parameters.AddWithValue("@aksesoris_tambahan", aksesoriNames);
+                cmd.Parameters.AddWithValue("@jam_mulai", jamMulai.ToString(@"hh\:mm\:ss"));
+                cmd.Parameters.AddWithValue("@durasi", durasi);
+                cmd.Parameters.AddWithValue("@tanggal_pemesanan", tanggal);
+                cmd.Parameters.AddWithValue("@total_biaya", totalTarif);
+
+                cmd.ExecuteNonQuery();
+
+                MessageBox.Show("Data berhasil ditambahkan", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Terjadi kesalahan: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
