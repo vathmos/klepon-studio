@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.logoutMenu = new System.Windows.Forms.Button();
             this.operatorMenu = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.settingMenu = new System.Windows.Forms.Button();
@@ -41,7 +42,6 @@
             this.historyMenu = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.logoutMenu = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.historyDataGridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +65,7 @@
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(337, 37);
             this.searchBox.TabIndex = 48;
+            this.searchBox.TextChanged += new System.EventHandler(this.searchBox_TextChanged);
             // 
             // label2
             // 
@@ -104,6 +105,20 @@
             this.panel1.Size = new System.Drawing.Size(402, 1074);
             this.panel1.TabIndex = 50;
             this.panel1.TabStop = true;
+            // 
+            // logoutMenu
+            // 
+            this.logoutMenu.BackColor = System.Drawing.Color.Black;
+            this.logoutMenu.Font = new System.Drawing.Font("Poppins", 13F);
+            this.logoutMenu.ForeColor = System.Drawing.Color.White;
+            this.logoutMenu.Location = new System.Drawing.Point(32, 814);
+            this.logoutMenu.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.logoutMenu.Name = "logoutMenu";
+            this.logoutMenu.Size = new System.Drawing.Size(291, 80);
+            this.logoutMenu.TabIndex = 6;
+            this.logoutMenu.Text = "Logout";
+            this.logoutMenu.UseVisualStyleBackColor = false;
+            this.logoutMenu.Click += new System.EventHandler(this.logoutMenu_Click_1);
             // 
             // operatorMenu
             // 
@@ -213,20 +228,6 @@
             this.button10.TabIndex = 2;
             this.button10.Text = "Riwayat pesanan";
             this.button10.UseVisualStyleBackColor = false;
-            // 
-            // logoutMenu
-            // 
-            this.logoutMenu.BackColor = System.Drawing.Color.Black;
-            this.logoutMenu.Font = new System.Drawing.Font("Poppins", 13F);
-            this.logoutMenu.ForeColor = System.Drawing.Color.White;
-            this.logoutMenu.Location = new System.Drawing.Point(32, 814);
-            this.logoutMenu.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.logoutMenu.Name = "logoutMenu";
-            this.logoutMenu.Size = new System.Drawing.Size(291, 80);
-            this.logoutMenu.TabIndex = 6;
-            this.logoutMenu.Text = "Logout";
-            this.logoutMenu.UseVisualStyleBackColor = false;
-            this.logoutMenu.Click += new System.EventHandler(this.logoutMenu_Click_1);
             // 
             // RiwayatBookingAdmin
             // 

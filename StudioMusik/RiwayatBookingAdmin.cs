@@ -140,6 +140,11 @@ namespace StudioMusik
         {
             Logout.FormLogout(this);
         }
+
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            Search(searchBox.Text);
+        }
     }
 }
 

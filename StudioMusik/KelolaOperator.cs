@@ -18,7 +18,7 @@ namespace StudioMusik
 
         private void LoadData()
         {
-            cmd = new SqlCommand("SELECT * FROM Operator ORDER BY id_operator ASC", conn);
+            cmd = new SqlCommand("EXEC usp_SelectAllFromTable @TableName = 'Operator', @OrderColumn = 'id_operator',  @SortDirection = 'ASC'", conn);
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             dt.Clear();

@@ -38,7 +38,7 @@ namespace TokoOlehOlehBarokah
 
         private void LoadData()
         {
-            cmd = new SqlCommand("SELECT * FROM Alat ORDER BY id_alat ASC", conn);
+            cmd = new SqlCommand("EXEC usp_SelectAllFromTable @TableName = 'Alat', @OrderColumn = 'id_alat',  @SortDirection = 'ASC'", conn);
             SqlDataAdapter adapter = new SqlDataAdapter();
             adapter.SelectCommand = cmd;
             DataTable dt = new DataTable();

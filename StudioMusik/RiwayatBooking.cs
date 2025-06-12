@@ -25,9 +25,8 @@ namespace StudioMusik
             SqlDataAdapter adapter = new SqlDataAdapter($"SELECT * FROM Booking WHERE status_pembayaran = 'dibayar' AND concat" +
             $"(id_booking,nama_band, nama_studio , status_pembayaran, alat_musik_tambahan, aksesoris_tambahan, total_biaya, jam_mulai, tanggal_pemesanan) like '%{searchValue}%'", conn);
             DataTable dt = new DataTable();
-
+            dt.Clear();
             adapter.Fill(dt);
-
             dataGridView1.DataSource = dt;
         }
 
@@ -47,6 +46,7 @@ namespace StudioMusik
         {
             Search(searchBox.Text);
         }
+
 
         private void RiwayatPemesanan_Load(object sender, EventArgs e)
         {
